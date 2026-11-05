@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ResourceSummary } from '../application/dto/ResourceSummary';
+	import { resolve } from '$app/paths';
 
 	let { resources }: { resources: ResourceSummary[] } = $props();
 
@@ -31,9 +32,8 @@
 			{#each resources as r (r.id)}
 				<tr class="border-b border-line transition hover:bg-surface">
 					<td class="px-4 py-4 font-medium">
-						<!-- A real <a> keeps the row keyboard-accessible. Typed resolve() lands with the route (detail page). -->
-						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-						<a href="/resources/{r.id}" class="block">{r.title}</a>
+						<!-- A real <a> keeps the row keyboard-accessible (tab, middle-click, no JS needed). -->
+						<a href={resolve('/resources/[id]', { id: r.id })} class="block">{r.title}</a>
 					</td>
 					<td class="px-4 py-4">{r.category.label}</td>
 					<td class="px-4 py-4">{r.language.label}</td>
