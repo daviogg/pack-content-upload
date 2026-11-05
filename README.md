@@ -1,47 +1,38 @@
-# sv
+# Pack · Resource Upload
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Take-home challenge: upload a learning resource (title, description, category, language,
+provider, roles, file) and browse the uploaded resources in a table.
 
-## Creating a project
+Stack: SvelteKit 3 · Svelte 5 · TypeScript · PostgreSQL (Drizzle) · Tailwind.
+Architecture: DDD + hexagonal (ports & adapters). See [docs/PLAN.md](docs/PLAN.md).
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Run locally (development)
 
-```sh
-# create a new project
-npx sv create my-app
+Requirements: Node 22 (`nvm use`), Docker.
+
+```bash
+cp .env.example .env          # defaults work out of the box
+docker compose up -d db       # PostgreSQL on localhost:5432
+npm install
+npm run dev                   # http://localhost:5173
 ```
 
-## Adding features
+Database tables are created automatically on first start. Uploaded files are written to
+`./data/uploads` (local storage driver).
 
-Add features to your project with `sv add`:
+## Tests
 
-```sh
-npx sv add
+```bash
+npm run test:unit             # domain + application, no infrastructure needed
+npm run test:integration      # Postgres repository, needs `docker compose up -d db`
 ```
 
-For example, to add Tailwind CSS:
+## Project layout
 
-```sh
-npx sv add tailwindcss
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+src/lib/domain/          entities, value objects, ports        (pure TypeScript)
+src/lib/application/     use cases + DTOs                      (depends on domain only)
+src/lib/infrastructure/  Drizzle repository, file storage, composition root
+src/lib/ui/              Svelte components and view helpers
+src/routes/              SvelteKit pages = primary adapters (load / form actions)
 ```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.

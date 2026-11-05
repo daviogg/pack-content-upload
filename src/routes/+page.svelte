@@ -1,13 +1,30 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import ResourceTable from '#lib/ui/ResourceTable.svelte';
+	import UploadModal from '#lib/ui/UploadModal.svelte';
 	import { TABS } from '#lib/ui/tabs.ts';
 	import { resolve } from '$app/paths';
 
-	let { data }: PageProps = $props();
+	let { data, form }: PageProps = $props();
+
+	// Open when asked via the URL, or when a failed submit has something to show.
+	const uploadOpen = $derived(data.uploadOpen || form !== null);
 </script>
 
-<section class="rounded-2xl border border-line bg-white shadow-sm">
+<section class="relative rounded-2xl border border-line bg-white shadow-sm">
+	{#if data.justUploaded}
+		<div
+			role="status"
+			class="absolute top-0 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-b-xl bg-white px-5 py-3 shadow-lg"
+		>
+			<span
+				class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-sm text-white"
+				>✓</span
+			>
+			<span>Resource Uploaded Successfully!</span>
+		</div>
+	{/if}
+
 	<div class="flex items-center gap-6 border-b border-line px-6 pt-5">
 		<nav class="flex gap-7 text-lg">
 			{#each TABS as tab (tab.id)}
@@ -45,3 +62,7 @@
 
 	<ResourceTable resources={data.resources} />
 </section>
+
+{#if uploadOpen}
+	<UploadModal options={data.options} values={form?.values} error={form?.error} />
+{/if}
