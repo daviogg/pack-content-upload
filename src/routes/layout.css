@@ -1,2 +1,23 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
+
+@theme {
+	--color-brand: #f5873a;
+	--color-brand-dark: #e2762a;
+	--color-ink: #1f2430;
+	--color-muted: #6b7280;
+	--color-surface: #f6f7f9;
+	--color-line: #e5e7eb;
+}
+
+body {
+	background-color: var(--color-surface);
+	color: var(--color-ink);
+	font-family:
+		Inter,
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		'Segoe UI',
+		sans-serif;
+}
