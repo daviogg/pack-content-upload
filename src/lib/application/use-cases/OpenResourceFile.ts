@@ -1,6 +1,6 @@
 import { ResourceId } from '../../domain/resource/ResourceId';
 import type { ResourceRepository } from '../../domain/resource/ResourceRepository';
-import type { FileStorage } from '../ports/FileStorage';
+import type { Disposition, FileStorage } from '../ports/FileStorage';
 
 /**
  * What the HTTP adapter should do to deliver the file:
@@ -15,6 +15,7 @@ export type OpenResourceFileResult =
 			contentType: string;
 			fileName: string;
 			sizeBytes: number;
+			disposition: Disposition;
 	  };
 
 /** Use case: a user clicks a resource to access the uploaded file. */
@@ -24,13 +25,20 @@ export class OpenResourceFile {
 		private readonly storage: FileStorage
 	) {}
 
-	async execute(rawId: string): Promise<OpenResourceFileResult | null> {
+	async execute(
+		rawId: string,
+		disposition: Disposition = 'inline'
+	): Promise<OpenResourceFileResult | null> {
 		const resource = await this.repository.findById(ResourceId.create(rawId));
 		if (!resource) return null;
 
 		const { key, mimeType, originalName, sizeBytes } = resource.file;
 
-		const url = await this.storage.getSignedUrl(key);
+		const url = await this.storage.getSignedUrl(key, {
+			fileName: originalName,
+			mimeType,
+			disposition
+		});
 		if (url) return { type: 'redirect', url };
 
 		return {
@@ -38,7 +46,8 @@ export class OpenResourceFile {
 			body: await this.storage.open(key),
 			contentType: mimeType,
 			fileName: originalName,
-			sizeBytes
+			sizeBytes,
+			disposition
 		};
 	}
 }

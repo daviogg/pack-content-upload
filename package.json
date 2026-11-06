@@ -51,6 +51,8 @@
 		"vitest": "^4.1.8"
 	},
 	"dependencies": {
+		"@aws-sdk/client-s3": "^3.1163.0",
+		"@aws-sdk/s3-request-presigner": "^3.1163.0",
 		"drizzle-orm": "^0.45.4",
 		"postgres": "^4.0.0"
 	}

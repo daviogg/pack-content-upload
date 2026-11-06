@@ -1,4 +1,13 @@
-import { DATABASE_URL, LOCAL_STORAGE_DIR, STORAGE_DRIVER } from '$app/env/private';
+import {
+	DATABASE_URL,
+	LOCAL_STORAGE_DIR,
+	S3_ACCESS_KEY_ID,
+	S3_BUCKET,
+	S3_ENDPOINT,
+	S3_REGION,
+	S3_SECRET_ACCESS_KEY,
+	STORAGE_DRIVER
+} from '$app/env/private';
 import type { FileStorage } from '../application/ports/FileStorage';
 import { ListResources } from '../application/use-cases/ListResources';
 import { OpenResourceFile } from '../application/use-cases/OpenResourceFile';
@@ -8,6 +17,7 @@ import { createDatabase, type Database } from './persistence/drizzle/client';
 import { DrizzleResourceRepository } from './persistence/drizzle/DrizzleResourceRepository';
 import { runMigrations } from './persistence/drizzle/migrate';
 import { LocalFileStorage } from './storage/LocalFileStorage';
+import { S3FileStorage } from './storage/S3FileStorage';
 import { SystemClock } from './system/SystemClock';
 import { UuidIdGenerator } from './system/UuidIdGenerator';
 
@@ -27,10 +37,20 @@ let repository: DrizzleResourceRepository | undefined;
 let storage: FileStorage | undefined;
 
 function createStorage(): FileStorage {
-	if (STORAGE_DRIVER === 's3') {
-		throw new Error('STORAGE_DRIVER=s3 is not available yet');
+	if (STORAGE_DRIVER === 'local') return new LocalFileStorage(LOCAL_STORAGE_DIR);
+
+	if (!S3_BUCKET || !S3_ENDPOINT || !S3_ACCESS_KEY_ID || !S3_SECRET_ACCESS_KEY) {
+		throw new Error(
+			'STORAGE_DRIVER=s3 needs S3_BUCKET, S3_ENDPOINT, S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY'
+		);
 	}
-	return new LocalFileStorage(LOCAL_STORAGE_DIR);
+	return new S3FileStorage({
+		bucket: S3_BUCKET,
+		region: S3_REGION,
+		endpoint: S3_ENDPOINT,
+		accessKeyId: S3_ACCESS_KEY_ID,
+		secretAccessKey: S3_SECRET_ACCESS_KEY
+	});
 }
 
 export const container = {

@@ -37,7 +37,16 @@ describe('OpenResourceFile', () => {
 		const result = await open.execute(id);
 		expect(result).toEqual({
 			type: 'redirect',
-			url: `https://cdn.example/resources/${id}/talk.mp4?signed=1`
+			url: `https://cdn.example/resources/${id}/talk.mp4?inline=1`
+		});
+	});
+
+	it('asks the storage for a download URL when the caller wants an attachment', async () => {
+		const { open, id } = await setup(new InMemoryFileStorage('https://cdn.example'));
+		const result = await open.execute(id, 'attachment');
+		expect(result).toEqual({
+			type: 'redirect',
+			url: `https://cdn.example/resources/${id}/talk.mp4?attachment=1`
 		});
 	});
 
@@ -48,6 +57,7 @@ describe('OpenResourceFile', () => {
 		if (result?.type !== 'stream') return;
 
 		expect(result.contentType).toBe('video/mp4');
+		expect(result.disposition).toBe('inline');
 		expect(result.fileName).toBe('talk.mp4');
 		expect(result.sizeBytes).toBe(11);
 		expect(await new Response(result.body).text()).toBe('video-bytes');

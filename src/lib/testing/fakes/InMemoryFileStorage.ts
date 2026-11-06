@@ -1,4 +1,4 @@
-import type { FileStorage } from '../../application/ports/FileStorage';
+import type { FileStorage, SignedUrlOptions } from '../../application/ports/FileStorage';
 
 /** Test double: stores blobs in a Map and can optionally pretend to sign URLs. */
 export class InMemoryFileStorage implements FileStorage {
@@ -16,8 +16,8 @@ export class InMemoryFileStorage implements FileStorage {
 		return blob.stream();
 	}
 
-	async getSignedUrl(key: string): Promise<string | null> {
-		return this.signedUrlBase ? `${this.signedUrlBase}/${key}?signed=1` : null;
+	async getSignedUrl(key: string, options: SignedUrlOptions): Promise<string | null> {
+		return this.signedUrlBase ? `${this.signedUrlBase}/${key}?${options.disposition}=1` : null;
 	}
 
 	async delete(key: string): Promise<void> {
