@@ -2,13 +2,22 @@
 	import type { PageProps } from './$types';
 	import ResourceTable from '#lib/ui/ResourceTable.svelte';
 	import UploadModal from '#lib/ui/UploadModal.svelte';
-	import { TABS } from '#lib/ui/tabs.ts';
+	import { findTab, TABS } from '#lib/ui/tabs.ts';
 	import { resolve } from '$app/paths';
 
 	let { data, form }: PageProps = $props();
 
 	// Open when asked via the URL, or when a failed submit has something to show.
 	const uploadOpen = $derived(data.uploadOpen || form !== null);
+
+	// What an empty table means depends on the active tab and search.
+	const emptyMessage = $derived(
+		data.search
+			? `Nothing matches “${data.search}”.`
+			: data.tab === 'all'
+				? 'No resources yet. Upload the first one.'
+				: `No ${findTab(data.tab).label.toLowerCase()} yet.`
+	);
 </script>
 
 <section class="relative rounded-2xl border border-line bg-white shadow-sm">
@@ -27,15 +36,16 @@
 
 	<!-- Tabs and search/upload stack on small screens, share one row from sm up -->
 	<div
-		class="flex flex-col gap-4 border-b border-line px-4 pt-5 sm:flex-row sm:items-center sm:gap-6 sm:px-6"
+		class="flex flex-col gap-4 border-b border-line px-4 pt-5 sm:flex-row sm:items-end sm:gap-6 sm:px-6"
 	>
-		<nav class="flex gap-6 overflow-x-auto text-lg whitespace-nowrap sm:gap-7">
+		<!-- The nav, not the tabs, overlaps the border by 1px: nothing overflows the scroll container -->
+		<nav class="flex gap-6 overflow-x-auto text-lg whitespace-nowrap sm:-mb-px sm:gap-7">
 			{#each TABS as tab (tab.id)}
 				<a
 					href={resolve(
 						`/?tab=${tab.id}${data.search ? `&q=${encodeURIComponent(data.search)}` : ''}`
 					)}
-					class="-mb-px border-b-2 pb-3 {data.tab === tab.id
+					class="border-b-2 pb-3 {data.tab === tab.id
 						? 'border-ink text-ink'
 						: 'border-transparent text-muted hover:text-ink'}"
 				>
@@ -63,7 +73,7 @@
 		</form>
 	</div>
 
-	<ResourceTable resources={data.resources} />
+	<ResourceTable resources={data.resources} {emptyMessage} />
 </section>
 
 {#if uploadOpen}

@@ -2,7 +2,10 @@
 	import type { ResourceSummary } from '../application/dto/ResourceSummary';
 	import { resolve } from '$app/paths';
 
-	let { resources }: { resources: ResourceSummary[] } = $props();
+	let {
+		resources,
+		emptyMessage = 'No resources yet.'
+	}: { resources: ResourceSummary[]; emptyMessage?: string } = $props();
 
 	const KIND_LABEL: Record<ResourceSummary['file']['kind'], string> = {
 		pdf: 'PDF',
@@ -14,7 +17,7 @@
 </script>
 
 {#if resources.length === 0}
-	<p class="px-4 py-16 text-center text-muted">No resources yet. Upload the first one.</p>
+	<p class="px-4 py-16 text-center text-muted">{emptyMessage}</p>
 {:else}
 	<!-- Secondary columns appear as the screen grows: sm adds Language, md adds Roles, views and provider -->
 	<table class="w-full text-left text-[15px]">
