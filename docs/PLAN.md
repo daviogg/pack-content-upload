@@ -3,6 +3,15 @@
 Goal: upload form + table of uploaded resources, SvelteKit + TypeScript + PostgreSQL,
 built with DDD tactical patterns inside a hexagonal (ports & adapters) architecture.
 
+## Status (2026-11-06)
+
+All ten steps are done. Live: https://pack-content-upload.fly.dev. Deviations from the plan:
+
+- Branch protection on `main` is not available for a private repository on GitHub Free;
+  work still goes through branches and pull requests, protection is enabled when the
+  repository goes public.
+- Extra, not planned: pixel-art error page, mobile layout, per-tab empty states.
+
 ## 1. Domain model
 
 Single bounded context: **Content Library**. One aggregate: `Resource`.
