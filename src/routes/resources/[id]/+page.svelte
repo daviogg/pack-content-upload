@@ -22,10 +22,10 @@
 
 <a href={resolve('/')} class="text-muted hover:text-ink">&larr; Resources</a>
 
-<section class="mt-4 rounded-2xl border border-line bg-white p-8 shadow-sm">
+<section class="mt-4 rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-8">
 	<div class="flex flex-wrap items-start justify-between gap-6">
 		<div class="max-w-3xl">
-			<h1 class="text-3xl font-semibold">{r.title}</h1>
+			<h1 class="text-2xl font-semibold break-words sm:text-3xl">{r.title}</h1>
 			<p class="mt-3 text-lg text-muted">{r.description}</p>
 		</div>
 		<div class="flex gap-3">
