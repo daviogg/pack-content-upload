@@ -23,7 +23,9 @@ export const GET: RequestHandler = async ({ params, url }) => {
 	}
 	if (!result) error(404, 'Resource not found');
 
-	if (result.type === 'redirect') redirect(302, result.url);
+	// The URL comes from our storage adapter (signed R2 URL), never from user input,
+	// so allowing an external redirect here cannot be abused as an open redirect.
+	if (result.type === 'redirect') redirect(302, result.url, { external: true });
 
 	return new Response(result.body, {
 		headers: {
