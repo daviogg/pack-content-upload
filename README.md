@@ -103,6 +103,22 @@ npm run test:integration      # Drizzle repository against Postgres (docker comp
 npm run lint && npm run check # prettier + eslint, svelte-check
 ```
 
+## Continuous integration and deployment
+
+Live demo: **https://pack-content-upload.fly.dev** (the machine sleeps when idle, the first
+request takes a couple of seconds).
+
+`.github/workflows/ci.yml` runs on every pull request and on `main`:
+
+1. `ci`: prettier + eslint, svelte-check, unit tests, integration tests against a Postgres
+   service, Playwright end-to-end tests against the production build.
+2. `deploy` (only on `main`, after `ci` is green): `flyctl deploy` with the project Dockerfile.
+
+Work happens on branches merged through pull requests; `main` is deployed automatically.
+Fly.io runs the app (`fly.toml`) next to a Fly Postgres cluster; files live in Cloudflare R2.
+Secrets (`DATABASE_URL`, `S3_*`) are stored with `fly secrets`, the GitHub repository only
+holds `FLY_API_TOKEN` for the deploy job.
+
 ## Decisions and assumptions
 
 - **Closed lists as domain value objects** (category, language, provider, roles): the brief
