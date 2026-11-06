@@ -58,3 +58,17 @@ jobs:
 
       - name: End-to-end tests (production build)
         run: npx playwright test
+
+  deploy:
+    name: deploy to Fly.io
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # Never run two deploys at once; a newer one waits for the older to finish.
+    concurrency: { group: deploy-production, cancel-in-progress: false }
+    steps:
+      - uses: actions/checkout@v5
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only --ha=false
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
