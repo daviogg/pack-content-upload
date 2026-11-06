@@ -24,17 +24,21 @@
 	}
 </script>
 
-<div class="fixed inset-0 z-20 flex items-start justify-center bg-ink/40 px-4 pt-24">
+<div
+	class="fixed inset-0 z-20 flex items-start justify-center overflow-y-auto bg-ink/40 px-4 py-6 sm:pt-24"
+>
 	<div
 		role="dialog"
 		aria-modal="true"
 		aria-labelledby="upload-title"
-		class="relative w-full max-w-3xl rounded-2xl bg-white p-10 shadow-xl"
+		class="relative w-full max-w-3xl rounded-2xl bg-white p-6 shadow-xl sm:p-10"
 	>
 		<a href={resolve('/')} aria-label="Close" class="absolute top-5 right-6 text-2xl text-muted"
 			>&times;</a
 		>
-		<h2 id="upload-title" class="mb-8 text-3xl font-semibold">Upload Resource</h2>
+		<h2 id="upload-title" class="mb-6 text-2xl font-semibold sm:mb-8 sm:text-3xl">
+			Upload Resource
+		</h2>
 
 		<form
 			method="POST"

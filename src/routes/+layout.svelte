@@ -24,11 +24,14 @@
 </svelte:head>
 
 <header class="border-b border-line bg-white">
-	<div class="mx-auto flex h-16 max-w-7xl items-center gap-10 px-6">
+	<div class="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6 md:gap-10">
 		<a href={resolve('/')} class="text-3xl font-black tracking-tight text-ink">
 			p<span class="text-brand">a</span>ck
 		</a>
-		<nav class="flex h-full items-center gap-8 text-lg font-semibold text-muted">
+		<!-- Scrolls sideways on narrow screens instead of overflowing the page -->
+		<nav
+			class="flex h-full items-center gap-6 overflow-x-auto text-lg font-semibold whitespace-nowrap text-muted md:gap-8"
+		>
 			{#each nav as item (item)}
 				{#if item === 'Resources'}
 					<a href={resolve('/')} class="flex h-16 items-center border-b-2 border-brand text-brand"
@@ -42,6 +45,6 @@
 	</div>
 </header>
 
-<main class="mx-auto max-w-7xl px-6 py-8">
+<main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
 	{@render children()}
 </main>

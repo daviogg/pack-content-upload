@@ -25,8 +25,11 @@
 		</div>
 	{/if}
 
-	<div class="flex items-center gap-6 border-b border-line px-6 pt-5">
-		<nav class="flex gap-7 text-lg">
+	<!-- Tabs and search/upload stack on small screens, share one row from sm up -->
+	<div
+		class="flex flex-col gap-4 border-b border-line px-4 pt-5 sm:flex-row sm:items-center sm:gap-6 sm:px-6"
+	>
+		<nav class="flex gap-6 overflow-x-auto text-lg whitespace-nowrap sm:gap-7">
 			{#each TABS as tab (tab.id)}
 				<a
 					href={resolve(
@@ -42,18 +45,18 @@
 			<span class="pb-3 text-muted/50">Archive</span>
 		</nav>
 
-		<form method="GET" class="ml-auto flex items-center gap-4 pb-3">
+		<form method="GET" class="flex items-center gap-3 pb-4 sm:ml-auto sm:gap-4 sm:pb-3">
 			<input type="hidden" name="tab" value={data.tab} />
 			<input
 				type="search"
 				name="q"
 				value={data.search}
 				placeholder="Field"
-				class="w-72 rounded-lg border-line text-base placeholder:text-muted/60 focus:border-brand focus:ring-brand"
+				class="w-full min-w-0 rounded-lg border-line text-base placeholder:text-muted/60 focus:border-brand focus:ring-brand sm:w-72"
 			/>
 			<a
 				href={resolve('/?upload=1')}
-				class="rounded-lg bg-brand px-6 py-2.5 text-lg font-bold text-white hover:bg-brand-dark"
+				class="shrink-0 rounded-lg bg-brand px-6 py-2.5 text-lg font-bold text-white hover:bg-brand-dark"
 			>
 				Upload
 			</a>
