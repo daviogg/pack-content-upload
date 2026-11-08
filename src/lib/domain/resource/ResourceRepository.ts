@@ -12,4 +12,6 @@ export interface ResourceRepository {
 	findById(id: ResourceId): Promise<Resource | null>;
 	/** All resources, newest upload first. */
 	findAll(): Promise<Resource[]>;
+	/** Removes the aggregate; a no-op when the id is unknown. */
+	delete(id: ResourceId): Promise<void>;
 }

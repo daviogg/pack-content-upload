@@ -24,4 +24,8 @@ export class InMemoryResourceRepository implements ResourceRepository {
 	async findAll(): Promise<Resource[]> {
 		return [...this.items.values()].sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime());
 	}
+
+	async delete(id: ResourceId): Promise<void> {
+		this.items.delete(id.toString());
+	}
 }

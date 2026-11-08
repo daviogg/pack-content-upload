@@ -9,6 +9,7 @@ import {
 	STORAGE_DRIVER
 } from '$app/env/private';
 import type { FileStorage } from '../application/ports/FileStorage';
+import { DeleteResource } from '../application/use-cases/DeleteResource';
 import { ListResources } from '../application/use-cases/ListResources';
 import { OpenResourceFile } from '../application/use-cases/OpenResourceFile';
 import { UploadResource } from '../application/use-cases/UploadResource';
@@ -83,6 +84,10 @@ export const container = {
 
 	get viewResource(): ViewResource {
 		return new ViewResource(this.repository);
+	},
+
+	get deleteResource(): DeleteResource {
+		return new DeleteResource(this.repository, this.storage);
 	},
 
 	/** Called once at server start (see src/hooks.server.ts). */
