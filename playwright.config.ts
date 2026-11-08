@@ -22,7 +22,8 @@ export default defineConfig({
 			DATABASE_URL: process.env.DATABASE_URL ?? 'postgres://pack:pack@localhost:5432/pack',
 			STORAGE_DRIVER: 'local',
 			LOCAL_STORAGE_DIR: './data/e2e-uploads',
-			BODY_SIZE_LIMIT: '209715200'
+			BODY_SIZE_LIMIT: '209715200',
+			ADMIN_PASSWORD: 'e2e-admin' // see e2e/admin.e2e.ts
 		}
 	}
 });
