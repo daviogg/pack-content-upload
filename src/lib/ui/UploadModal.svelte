@@ -12,8 +12,10 @@
 
 	let { options, values, error }: Props = $props();
 
-	// The only client-side state: the name of the file picked, shown next to "Select file".
+	// Client-side state: the file picked (shown next to "Select file") and
+	// whether a submit is in flight, so a second click cannot start a second upload.
 	let fileName = $state('');
+	let submitting = $state(false);
 
 	const fieldClass =
 		'w-full rounded-lg border-line text-base placeholder:text-muted/60 focus:border-brand focus:ring-brand';
@@ -44,7 +46,13 @@
 			method="POST"
 			action="?/upload"
 			enctype="multipart/form-data"
-			use:enhance
+			use:enhance={() => {
+				submitting = true;
+				return async ({ update }) => {
+					await update();
+					submitting = false;
+				};
+			}}
 			class="space-y-5"
 		>
 			<div>
@@ -140,9 +148,10 @@
 			<div class="flex justify-end pt-2">
 				<button
 					type="submit"
-					class="rounded-lg bg-brand px-7 py-2.5 text-xl font-bold text-white hover:bg-brand-dark"
+					disabled={submitting}
+					class="rounded-lg bg-brand px-7 py-2.5 text-xl font-bold text-white hover:bg-brand-dark disabled:cursor-wait disabled:opacity-60"
 				>
-					Upload
+					{submitting ? 'Uploading…' : 'Upload'}
 				</button>
 			</div>
 		</form>
