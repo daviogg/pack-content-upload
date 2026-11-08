@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
 						name: 'integration',
 						environment: 'node',
 						include: ['src/**/*.integration.test.ts'],
-						// Needs the Postgres from docker compose; DATABASE_URL comes from .env
+						// Needs the Postgres from docker compose; TEST_DATABASE_URL comes from .env
 						env,
 						fileParallelism: false
 					}

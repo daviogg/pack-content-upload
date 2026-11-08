@@ -32,6 +32,7 @@ services:
       - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro # creates pack_test on first start
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U pack -d pack']
       interval: 5s

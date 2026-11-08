@@ -30,6 +30,7 @@ jobs:
 
     env:
       DATABASE_URL: postgres://pack:pack@localhost:5432/pack
+      TEST_DATABASE_URL: postgres://pack:pack@localhost:5432/pack_test
 
     steps:
       - uses: actions/checkout@v5
@@ -40,6 +41,9 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - name: Create the test database (docker compose does this with docker/initdb)
+        run: psql "$DATABASE_URL" -f docker/initdb/01-test-database.sql
 
       - name: Lint (prettier + eslint)
         run: npm run lint
