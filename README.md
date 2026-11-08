@@ -36,7 +36,7 @@ gets a Delete button on each resource. Without it the app has no administrator.
 ```bash
 npm run lint && npm run check   # prettier, eslint, svelte-check
 npm run test:unit -- --run      # domain, use cases, adapters with fakes
-npm run test:integration        # Drizzle repository against Postgres
+npm run test:integration        # Drizzle repository against Postgres (pack_test database)
 npx playwright test             # end-to-end against the production build
 ```
 

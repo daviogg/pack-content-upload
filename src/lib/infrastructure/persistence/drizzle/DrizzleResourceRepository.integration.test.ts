@@ -14,10 +14,11 @@ import { StoredFile } from '../../../domain/resource/StoredFile';
 import { Title } from '../../../domain/resource/Title';
 
 /**
- * Runs against the Postgres started by `docker compose up db`.
- * Needs DATABASE_URL (loaded from .env by vite.config.ts).
+ * Runs against the `pack_test` database of the Postgres started by
+ * `docker compose up db`. Needs TEST_DATABASE_URL (from .env via vite.config.ts);
+ * tables are emptied before each test, so it must never point at the dev database.
  */
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL = process.env.TEST_DATABASE_URL;
 
 function resource(n: number, uploadedAt: Date): Resource {
 	return Resource.upload({

@@ -19,7 +19,9 @@ export default defineConfig({
 		env: {
 			PORT: String(port),
 			ORIGIN: origin, // baked into the build for the CSRF check on form posts
-			DATABASE_URL: process.env.DATABASE_URL ?? 'postgres://pack:pack@localhost:5432/pack',
+			// Same test database as the integration tests, never the development one
+			DATABASE_URL:
+				process.env.TEST_DATABASE_URL ?? 'postgres://pack:pack@localhost:5432/pack_test',
 			STORAGE_DRIVER: 'local',
 			LOCAL_STORAGE_DIR: './data/e2e-uploads',
 			BODY_SIZE_LIMIT: '209715200',
