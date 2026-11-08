@@ -13,7 +13,8 @@ test('uploads a resource, lists it and serves its file', async ({ page }) => {
 	await form.locator('select[name="category"]').selectOption('leadership');
 	await form.locator('select[name="language"]').selectOption('en');
 	await form.locator('select[name="provider"]').selectOption('pack');
-	await form.locator('select[name="roles"]').selectOption('mentor');
+	await form.getByText('Role*').click();
+	await form.getByLabel('Mentor / Coach').check();
 	await form.locator('input[name="file"]').setInputFiles({
 		name: 'guide.pdf',
 		mimeType: 'application/pdf',
@@ -61,8 +62,6 @@ test('shows the domain error and keeps the typed values when no role is selected
 		mimeType: 'text/plain',
 		buffer: Buffer.from('hello')
 	});
-	// Skip the browser's own `required` check: this test proves the server validates too
-	await form.locator('form').evaluate((f: HTMLFormElement) => (f.noValidate = true));
 	await form.getByRole('button', { name: 'Upload' }).click();
 
 	await expect(form.getByRole('alert')).toHaveText('Select at least one role');
