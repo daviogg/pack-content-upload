@@ -98,25 +98,15 @@
 				{/each}
 			</select>
 
-			<fieldset
-				class="rounded-lg border border-line px-4 py-3 {error?.field === 'roles' ? errorClass : ''}"
-			>
-				<legend class="px-1 text-sm text-muted">Role*</legend>
-				<div class="flex gap-8">
-					{#each options.roles as role (role.code)}
-						<label class="flex items-center gap-2">
-							<input
-								type="checkbox"
-								name="roles"
-								value={role.code}
-								defaultChecked={values?.roles.includes(role.code) ?? false}
-								class="rounded border-line text-brand focus:ring-brand"
-							/>
-							{role.label}
-						</label>
-					{/each}
-				</div>
-			</fieldset>
+			<!-- One role per upload, as in the mockup; the domain itself allows a set -->
+			<select name="roles" required class={cls('roles')}>
+				<option value="" disabled selected={!values?.roles.length}>Role*</option>
+				{#each options.roles as role (role.code)}
+					<option value={role.code} selected={values?.roles.includes(role.code)}
+						>{role.label}</option
+					>
+				{/each}
+			</select>
 
 			<div class="flex items-center gap-4">
 				<div

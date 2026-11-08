@@ -50,6 +50,7 @@ export function readUploadFormValues(data: FormData): UploadFormValues {
 		category: text('category'),
 		language: text('language'),
 		provider: text('provider'),
-		roles: data.getAll('roles').filter((r): r is string => typeof r === 'string')
+		// The select's placeholder submits "", which is "no role", not an unknown one
+		roles: data.getAll('roles').filter((r): r is string => typeof r === 'string' && r !== '')
 	};
 }
