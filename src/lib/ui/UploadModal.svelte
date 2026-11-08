@@ -17,17 +17,6 @@
 	// whether a submit is in flight, so a second click cannot start a second upload.
 	let fileName = $state('');
 	let submitting = $state(false);
-	// Roles picked so far; starts from the values echoed after a failed submit (a one-off
-	// initial value, like defaultValue on the inputs) and drives the dropdown's label.
-	// svelte-ignore state_referenced_locally
-	let roles = $state<string[]>(values?.roles ?? []);
-	const rolesLabel = $derived(
-		options.roles
-			.filter((role) => roles.includes(role.code))
-			.map((role) => role.label)
-			.join(', ')
-	);
-
 	const fieldClass =
 		'w-full rounded-lg border-line text-base placeholder:text-muted/60 focus:border-brand focus:ring-brand';
 	const errorClass = 'border-red-500';
@@ -121,43 +110,35 @@
 			</select>
 
 			<!--
-				Roles are multi-select (brief) but look like the other dropdowns (mockup):
-				a native <details> whose summary is styled as a select and whose list holds
-				checkboxes. No JavaScript needed to open it or to submit the values.
+				Roles are multi-select (brief). Checkboxes under the hood, shown as toggle pills
+				inside a field-shaped box so the row reads like the other inputs. No JavaScript:
+				`peer-checked` styles the pill from the hidden checkbox's state.
 			-->
-			<details class="relative">
-				<summary
-					class="flex cursor-pointer list-none items-center justify-between {cls(
-						'roles'
-					)} {rolesLabel ? '' : 'text-muted/60'}"
-				>
-					{rolesLabel || 'Role*'}
-					<svg class="h-5 w-5 text-ink" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-						<path
-							d="M6 8l4 4 4-4"
-							stroke="currentColor"
-							stroke-width="1.5"
-							stroke-linecap="round"
+			<fieldset
+				class="flex flex-wrap items-center gap-3 rounded-lg border px-4 py-2 {error?.field ===
+				'roles'
+					? errorClass
+					: 'border-line'}"
+			>
+				<legend class="sr-only">Role*</legend>
+				<span class="mr-auto text-muted/60">Role*</span>
+				{#each options.roles as role (role.code)}
+					<label class="cursor-pointer">
+						<input
+							type="checkbox"
+							name="roles"
+							value={role.code}
+							defaultChecked={values?.roles.includes(role.code) ?? false}
+							class="peer sr-only"
 						/>
-					</svg>
-				</summary>
-				<div
-					class="absolute right-0 left-0 z-10 mt-1 space-y-1 rounded-lg border border-line bg-white p-2 shadow-lg"
-				>
-					{#each options.roles as role (role.code)}
-						<label class="flex items-center gap-3 rounded px-2 py-1.5 hover:bg-surface">
-							<input
-								type="checkbox"
-								name="roles"
-								value={role.code}
-								bind:group={roles}
-								class="rounded border-line text-brand focus:ring-brand"
-							/>
+						<span
+							class="inline-block rounded-full border border-line px-4 py-1.5 text-sm font-semibold text-muted peer-checked:border-brand peer-checked:bg-brand peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-brand/50 hover:border-brand"
+						>
 							{role.label}
-						</label>
-					{/each}
-				</div>
-			</details>
+						</span>
+					</label>
+				{/each}
+			</fieldset>
 
 			<div class="flex items-center gap-4">
 				<div

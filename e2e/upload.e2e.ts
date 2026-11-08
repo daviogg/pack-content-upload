@@ -13,8 +13,8 @@ test('uploads a resource, lists it and serves its file', async ({ page }) => {
 	await form.locator('select[name="category"]').selectOption('leadership');
 	await form.locator('select[name="language"]').selectOption('en');
 	await form.locator('select[name="provider"]').selectOption('pack');
-	await form.getByText('Role*').click();
-	await form.getByLabel('Mentor / Coach').check();
+	await form.getByText('Mentor / Coach').click(); // the pill; the checkbox itself is sr-only
+	await expect(form.getByLabel('Mentor / Coach')).toBeChecked();
 	await form.locator('input[name="file"]').setInputFiles({
 		name: 'guide.pdf',
 		mimeType: 'application/pdf',
