@@ -8,7 +8,7 @@ import { readUploadFormValues, uploadFormOptions } from '#lib/ui/uploadForm.ts';
 /**
  * Resources list. Tab and search live in the URL (?tab=videos&q=conflict)
  * so the page is shareable and works without client-side JavaScript.
- * `?upload=1` opens the upload dialog, `?uploaded=1` shows the success toast.
+ * `?upload=1` opens the upload dialog, `?uploaded=1` / `?deleted=1` show a toast.
  */
 export const load: PageServerLoad = async ({ url }) => {
 	const tab = findTab(url.searchParams.get('tab'));
@@ -25,6 +25,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		search,
 		uploadOpen: url.searchParams.has('upload'),
 		justUploaded: url.searchParams.has('uploaded'),
+		justDeleted: url.searchParams.has('deleted'),
 		options: uploadFormOptions()
 	};
 };

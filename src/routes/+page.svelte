@@ -21,7 +21,7 @@
 </script>
 
 <section class="relative rounded-2xl border border-line bg-white shadow-sm">
-	{#if data.justUploaded}
+	{#if data.justUploaded || data.justDeleted}
 		<div
 			role="status"
 			class="absolute top-0 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-b-xl bg-white px-5 py-3 shadow-lg"
@@ -30,7 +30,7 @@
 				class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-sm text-white"
 				>✓</span
 			>
-			<span>Resource Uploaded Successfully!</span>
+			<span>{data.justDeleted ? 'Resource deleted.' : 'Resource Uploaded Successfully!'}</span>
 		</div>
 	{/if}
 
