@@ -90,6 +90,16 @@ describe.skipIf(!DATABASE_URL)('DrizzleResourceRepository (integration)', () => 
 		expect(titles).toEqual(['Resource 4', 'Resource 5', 'Resource 3']);
 	});
 
+	it('deletes a resource and ignores unknown ids', async () => {
+		const r = resource(6, new Date('2026-11-05T10:00:00Z'));
+		await repository.save(r);
+
+		await repository.delete(r.id);
+		await repository.delete(r.id);
+
+		expect(await repository.findById(r.id)).toBeNull();
+	});
+
 	it('returns null for an unknown id', async () => {
 		expect(
 			await repository.findById(ResourceId.create('00000000-0000-4000-8000-000000000999'))

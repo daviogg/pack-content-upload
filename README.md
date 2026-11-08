@@ -28,6 +28,9 @@ Migrations run at startup. Files go to `./data/uploads`; set `STORAGE_DRIVER=s3`
 `S3_*` variables in `.env` to use Cloudflare R2 (private bucket, signed URLs). Every
 variable is documented in `.env.example` and validated in `src/env.ts`.
 
+Set `ADMIN_PASSWORD` to enable `/admin`: a logged-in administrator (signed, HttpOnly cookie)
+gets a Delete button on each resource. Without it the app has no administrator.
+
 ## Tests
 
 ```bash
@@ -58,5 +61,5 @@ merging to `main` deploys to Fly.io (`fly.toml`, Fly Postgres, Cloudflare R2).
 
 - Closed lists (category, language, provider, roles) are domain value objects.
 - At least one role is required; files up to 200 MB from a MIME whitelist.
-- No authentication, so the "Uploaded By" column is left out. View count increments when
-  the detail page is opened.
+- No user accounts, so the "Uploaded By" column is left out; a single shared admin
+  password guards deletion. View count increments when the detail page is opened.

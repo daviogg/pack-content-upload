@@ -11,6 +11,8 @@ All ten steps are done. Live: https://pack-content-upload.fly.dev. Deviations fr
   work still goes through branches and pull requests, protection is enabled when the
   repository goes public.
 - Extra, not planned: pixel-art error page, mobile layout, per-tab empty states.
+- Added 2026-11-08: single-administrator login (`ADMIN_PASSWORD`, HMAC-signed cookie) and
+  resource deletion (`DeleteResource` use case, `/admin`, Delete button on the detail page).
 
 ## 1. Domain model
 

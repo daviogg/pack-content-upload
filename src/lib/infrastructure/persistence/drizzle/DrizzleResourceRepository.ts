@@ -40,6 +40,10 @@ export class DrizzleResourceRepository implements ResourceRepository {
 		const rows = await this.db.select().from(resources).orderBy(desc(resources.uploadedAt));
 		return rows.map(toDomain);
 	}
+
+	async delete(id: ResourceId): Promise<void> {
+		await this.db.delete(resources).where(eq(resources.id, id.toString()));
+	}
 }
 
 function toRow(resource: Resource): NewResourceRow {

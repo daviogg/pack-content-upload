@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import { enhance } from '$app/forms';
 	import { resolve } from '$app/paths';
 	import ResourceViewer from '#lib/ui/ResourceViewer.svelte';
 
@@ -43,6 +44,23 @@
 			>
 				Download
 			</a>
+			{#if data.isAdmin}
+				<!-- Shown to admins only; the action re-checks the session server-side -->
+				<form
+					method="POST"
+					action="?/delete"
+					use:enhance={({ cancel }) => {
+						if (!confirm(`Delete “${r.title}”? This cannot be undone.`)) cancel();
+					}}
+				>
+					<button
+						type="submit"
+						class="rounded-lg border border-red-300 px-5 py-2.5 font-bold text-red-600 hover:bg-red-50"
+					>
+						Delete
+					</button>
+				</form>
+			{/if}
 		</div>
 	</div>
 

@@ -3,7 +3,10 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			/** Set by hooks.server.ts from the signed admin cookie. */
+			isAdmin: boolean;
+		}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}

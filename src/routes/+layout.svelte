@@ -1,10 +1,11 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '#lib/assets/favicon.svg';
+	import { enhance } from '$app/forms';
 	import { resolve } from '$app/paths';
 	import type { LayoutProps } from './$types';
 
-	let { children }: LayoutProps = $props();
+	let { data, children }: LayoutProps = $props();
 
 	// Only "Resources" is implemented; the other entries mirror the design.
 	const nav = [
@@ -42,6 +43,19 @@
 				{/if}
 			{/each}
 		</nav>
+		<!-- Admin entry point: a login link, or a logout form once the signed cookie is set -->
+		{#if data.isAdmin}
+			<form method="POST" action="{resolve('/admin')}?/logout" use:enhance class="ml-auto shrink-0">
+				<button type="submit" class="text-sm font-semibold text-muted hover:text-ink"
+					>Log out</button
+				>
+			</form>
+		{:else}
+			<a
+				href={resolve('/admin')}
+				class="ml-auto shrink-0 text-sm font-semibold text-muted hover:text-ink">Admin</a
+			>
+		{/if}
 	</div>
 </header>
 

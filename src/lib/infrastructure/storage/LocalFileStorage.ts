@@ -1,5 +1,5 @@
 import { createReadStream } from 'node:fs';
-import { access, mkdir, rm, writeFile } from 'node:fs/promises';
+import { access, mkdir, rm, rmdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { Readable } from 'node:stream';
 import type { FileStorage } from '../../application/ports/FileStorage';
@@ -30,7 +30,11 @@ export class LocalFileStorage implements FileStorage {
 	}
 
 	async delete(key: string): Promise<void> {
-		await rm(this.resolve(key), { force: true });
+		const target = this.resolve(key);
+		await rm(target, { force: true });
+		// Keys are "resources/<id>/<name>": drop the per-resource folder once it is empty.
+		const folder = path.dirname(target);
+		if (folder !== path.resolve(this.rootDir)) await rmdir(folder).catch(() => {});
 	}
 
 	private resolve(key: string): string {
