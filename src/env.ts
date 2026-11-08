@@ -32,5 +32,8 @@ export const variables = defineEnvVars({
 	S3_REGION: { schema: (value) => value || 'auto' },
 	S3_ENDPOINT: { schema: optional },
 	S3_ACCESS_KEY_ID: { schema: optional },
-	S3_SECRET_ACCESS_KEY: { schema: optional }
+	S3_SECRET_ACCESS_KEY: { schema: optional },
+
+	/** Unset = no administrator: login is refused and nothing can be deleted. */
+	ADMIN_PASSWORD: { schema: optional }
 });

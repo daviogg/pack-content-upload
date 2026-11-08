@@ -1,4 +1,5 @@
 import {
+	ADMIN_PASSWORD,
 	DATABASE_URL,
 	LOCAL_STORAGE_DIR,
 	S3_ACCESS_KEY_ID,
@@ -10,6 +11,7 @@ import {
 } from '$app/env/private';
 import type { FileStorage } from '../application/ports/FileStorage';
 import { DeleteResource } from '../application/use-cases/DeleteResource';
+import { AdminSession } from './auth/AdminSession';
 import { ListResources } from '../application/use-cases/ListResources';
 import { OpenResourceFile } from '../application/use-cases/OpenResourceFile';
 import { UploadResource } from '../application/use-cases/UploadResource';
@@ -36,6 +38,7 @@ function db(): Database {
 
 let repository: DrizzleResourceRepository | undefined;
 let storage: FileStorage | undefined;
+const adminSession = ADMIN_PASSWORD ? new AdminSession(ADMIN_PASSWORD) : null;
 
 function createStorage(): FileStorage {
 	if (STORAGE_DRIVER === 'local') return new LocalFileStorage(LOCAL_STORAGE_DIR);
@@ -88,6 +91,11 @@ export const container = {
 
 	get deleteResource(): DeleteResource {
 		return new DeleteResource(this.repository, this.storage);
+	},
+
+	/** `null` when ADMIN_PASSWORD is not set: the app runs without an administrator. */
+	get adminSession(): AdminSession | null {
+		return adminSession;
 	},
 
 	/** Called once at server start (see src/hooks.server.ts). */
