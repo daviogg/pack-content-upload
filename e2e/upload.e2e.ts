@@ -27,6 +27,12 @@ test('uploads a resource, lists it and serves its file', async ({ page }) => {
 	await expect(row).toContainText('Leadership');
 	await expect(row).toContainText('PDF');
 
+	// The dialog's history entry was replaced: Back lands on the plain list
+	await page.goBack();
+	await expect(page).toHaveURL('/');
+	await expect(page.getByRole('dialog')).toHaveCount(0);
+	await page.goForward();
+
 	await row.getByRole('link', { name: title }).click();
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText(title);
 
