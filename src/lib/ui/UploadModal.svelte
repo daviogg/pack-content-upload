@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import type { UploadFormOptions, UploadFormValues } from './uploadForm';
 
@@ -35,8 +36,12 @@
 		aria-labelledby="upload-title"
 		class="relative w-full max-w-3xl rounded-2xl bg-white p-6 shadow-xl sm:p-10"
 	>
-		<a href={resolve('/')} aria-label="Close" class="absolute top-5 right-6 text-2xl text-muted"
-			>&times;</a
+		<!-- Closing replaces the dialog's history entry for the same reason -->
+		<a
+			href={resolve('/')}
+			data-sveltekit-replacestate
+			aria-label="Close"
+			class="absolute top-5 right-6 text-2xl text-muted">&times;</a
 		>
 		<h2 id="upload-title" class="mb-6 text-2xl font-semibold sm:mb-8 sm:text-3xl">
 			Upload Resource
@@ -48,8 +53,15 @@
 			enctype="multipart/form-data"
 			use:enhance={() => {
 				submitting = true;
-				return async ({ update }) => {
-					await update();
+				return async ({ result, update }) => {
+					if (result.type === 'redirect') {
+						// Replace the dialog's history entry: Back from the list must not reopen it.
+						// The location is our own server's redirect, not user input.
+						// eslint-disable-next-line svelte/no-navigation-without-resolve
+						await goto(result.location, { replaceState: true, invalidateAll: true });
+					} else {
+						await update();
+					}
 					submitting = false;
 				};
 			}}
