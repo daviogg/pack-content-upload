@@ -11,7 +11,7 @@ async function uploadResource(page: Page, title: string): Promise<string> {
 	await form.locator('select[name="category"]').selectOption('personal-growth');
 	await form.locator('select[name="language"]').selectOption('en');
 	await form.locator('select[name="provider"]').selectOption('mentor');
-	await form.getByLabel('Mentee / Coachee').check();
+	await form.locator('select[name="roles"]').selectOption('mentee');
 	await form.locator('input[name="file"]').setInputFiles({
 		name: 'notes.txt',
 		mimeType: 'text/plain',
